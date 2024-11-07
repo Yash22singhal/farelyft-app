@@ -52,7 +52,7 @@ const OlaTab = ({ coordinates, setOlaFareDetails }) => {
     dropLat !== '' && dropLng !== '';
 
   const olaURL = isCoordinatesValid
-    ? `https://m.olacabs.com/?pickup_lat=${pickupLat}&pickup_lng=${pickupLng}&drop_lat=${dropLat}&drop_lng=${dropLng}`
+    ? `https://book.olacabs.com/?serviceType=p2p&utm_source=widget_on_olacabs&drop_lat=${dropLat}&drop_lng=${dropLng}&drop_name=${encodeURIComponent(dropName)}&lat=${pickupLat}&lng=${pickupLng}&pickup_name=${encodeURIComponent(pickupName)}&pickup=`
     : 'https://www.olacabs.com'; // Default URL if coordinates are invalid
 
   const injectJS = `
