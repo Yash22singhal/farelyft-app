@@ -69,7 +69,6 @@ const UberTab = ({ coordinates, setUberFareDetails }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10 }}>Uber</Text>
       <WebView 
         source={{ uri: uberURL }} 
         style={{ flex: 1 }} 

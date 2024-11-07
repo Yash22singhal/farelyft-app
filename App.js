@@ -337,15 +337,102 @@
 
 
 
+// import React, { useState } from 'react';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+// import HomeScreen from './components/HomeScreen'; // Import HomeScreen
+// import UberTab from './components/UberTab'; // Import UberTab
+// import OlaTab from './components/OlaTab'; // Import OlaTab
+// import QuickRide from './components/QuickRideTab';
+// import FareDetailsTab from './components/FareDetailsTab'; // Import FareDetailsTab
+// //import MapboxGL from '@react-native-mapbox-gl/maps';
+
+
+// const Tab = createBottomTabNavigator();
+
+// //MapboxGL.setAccessToken('pk.eyJ1IjoidWdhbmRhYnVzaW5lc3NwYWdlcyIsImEiOiJjbTM3Zm56ZW0waHA0Mm1zZjJjZWluNzI1In0.J1bRs6RUA0HifWwQFgGIzg'); // Replace with your token
+
+// //MapboxGL.setAccessToken('pk.eyJ1IjoidWdhbmRhYnVzaW5lc3NwYWdlcyIsImEiOiJjbTM3a2s4d20wZ2xuMmpzZXJqa25ibmMyIn0.TPTYsqPdLW_nloMWgx_C4w');
+
+// const App = () => {
+//   // Global state for coordinates and fare details
+//   const [coordinates, setCoordinates] = useState({
+//     pickupLat: '',
+//     pickupLng: '',
+//     dropLat: '',
+//     dropLng: '',
+//   });
+  
+//   const [uberFareDetails, setUberFareDetails] = useState(null);
+//   const [olaFareDetails, setOlaFareDetails] = useState(null);
+//   const [quickRideFareDetails, setQuickRideFareDetails] = useState(null)
+
+//   return (
+//     <NavigationContainer>
+//       <Tab.Navigator initialRouteName="Home">
+//         <Tab.Screen
+//           name="Home"
+//           children={(props) => (
+//             <HomeScreen {...props} setCoordinates={setCoordinates} />
+//           )}
+//         />
+//         <Tab.Screen
+//           name="Uber"
+//           children={(props) => (
+//             <UberTab {...props} coordinates={coordinates} setUberFareDetails={setUberFareDetails} />
+//           )}
+//         />
+//         <Tab.Screen
+//           name="Ola"
+//           children={(props) => (
+//             <OlaTab {...props} coordinates={coordinates} setOlaFareDetails={setOlaFareDetails} />
+//           )}
+//         />
+//         <Tab.Screen
+//           name="QuickRide"
+//           children={(props) => (
+//             <QuickRide {...props} coordinates={coordinates} setQuickRideFareDetails={setQuickRideFareDetails} />
+//           )}
+//         />
+//         <Tab.Screen
+//           name="Fare Details"
+//           children={(props) => (
+//             <FareDetailsTab
+//               {...props}
+//               uberFareDetails={uberFareDetails}
+//               olaFareDetails={olaFareDetails}
+//             />
+//           )}
+//         />
+//       </Tab.Navigator>
+//     </NavigationContainer>
+//   );
+// };
+
+// export default App;
+
+
+
+
+
+
+
+
+
+
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack'; // Import Stack Navigator
 import HomeScreen from './components/HomeScreen'; // Import HomeScreen
 import UberTab from './components/UberTab'; // Import UberTab
 import OlaTab from './components/OlaTab'; // Import OlaTab
-import FareDetailsTab from './components/FareDetailsTab'; // Import FareDetailsTab
+import QuickRide from './components/QuickRideTab';
+import Header from './components/Header'; // Import your custom Header component
+import { Image } from 'react-native'; // Import Image for custom icons
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator(); // Create Stack Navigator for Header
 
 const App = () => {
   // Global state for coordinates and fare details
@@ -355,42 +442,108 @@ const App = () => {
     dropLat: '',
     dropLng: '',
   });
-  
+
   const [uberFareDetails, setUberFareDetails] = useState(null);
   const [olaFareDetails, setOlaFareDetails] = useState(null);
+  const [quickRideFareDetails, setQuickRideFareDetails] = useState(null);
 
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen
-          name="Home"
-          children={(props) => (
-            <HomeScreen {...props} setCoordinates={setCoordinates} />
+      {/* Stack Navigator for rendering the header */}
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false, // Hide the default header
+        }}
+      >
+        <Stack.Screen
+          name="Main"
+          options={{
+            headerShown: false, // Hide the default header for this screen
+          }}
+        >
+          {() => (
+            <>
+              {/* Persistent Header */}
+              <Header />
+              {/* Bottom Tab Navigator */}
+              <Tab.Navigator
+                initialRouteName="Home"
+                screenOptions={{
+                  tabBarStyle: {
+                    height: 70, // Increase the height of the tab bar
+                    paddingBottom: 10, // Optional: Add padding for better spacing
+                  },
+                }}
+              >
+                <Tab.Screen
+                  name="Home"
+                  children={(props) => (
+                    <HomeScreen {...props} setCoordinates={setCoordinates} />
+                  )}
+                  options={{
+                    tabBarIcon: () => (
+                      <Image
+                        source={require('./assets/images/home_icon.png')}
+                        style={{ width: 35, height: 35, resizeMode: 'contain' }} // Adjusted size of the icon
+                      />
+                    ),
+                    tabBarLabel: () => null, // Remove label under the icon
+                    headerShown: false, // Hide the heading (tab name) at the top
+                  }}
+                />
+                <Tab.Screen
+                  name="Uber"
+                  children={(props) => (
+                    <UberTab {...props} coordinates={coordinates} setUberFareDetails={setUberFareDetails} />
+                  )}
+                  options={{
+                    tabBarIcon: () => (
+                      <Image
+                        source={require('./assets/images/uber_logo.png')}
+                        style={{ width: 35, height: 35, resizeMode: 'contain' }} // Adjusted size of the icon
+                      />
+                    ),
+                    tabBarLabel: () => null, // Remove label under the icon
+                    headerShown: false, // Hide the heading (tab name) at the top
+                  }}
+                />
+                <Tab.Screen
+                  name="Ola"
+                  children={(props) => (
+                    <OlaTab {...props} coordinates={coordinates} setOlaFareDetails={setOlaFareDetails} />
+                  )}
+                  options={{
+                    tabBarIcon: () => (
+                      <Image
+                        source={require('./assets/images/ola_logo.png')}
+                        style={{ width: 35, height: 35, resizeMode: 'contain' }} // Adjusted size of the icon
+                      />
+                    ),
+                    tabBarLabel: () => null, // Remove label under the icon
+                    headerShown: false, // Hide the heading (tab name) at the top
+                  }}
+                />
+                <Tab.Screen
+                  name="QuickRide"
+                  children={(props) => (
+                    <QuickRide {...props} coordinates={coordinates} setQuickRideFareDetails={setQuickRideFareDetails} />
+                  )}
+                  options={{
+                    tabBarIcon: () => (
+                      <Image
+                        source={require('./assets/images/quickride_logo.png')}
+                        style={{ width: 35, height: 35, resizeMode: 'contain' }} // Adjusted size of the icon
+                      />
+                    ),
+                    tabBarLabel: () => null, // Remove label under the icon
+                    headerShown: false, // Hide the heading (tab name) at the top
+                  }}
+                />
+              </Tab.Navigator>
+            </>
           )}
-        />
-        <Tab.Screen
-          name="Uber"
-          children={(props) => (
-            <UberTab {...props} coordinates={coordinates} setUberFareDetails={setUberFareDetails} />
-          )}
-        />
-        <Tab.Screen
-          name="Ola"
-          children={(props) => (
-            <OlaTab {...props} coordinates={coordinates} setOlaFareDetails={setOlaFareDetails} />
-          )}
-        />
-        <Tab.Screen
-          name="Fare Details"
-          children={(props) => (
-            <FareDetailsTab
-              {...props}
-              uberFareDetails={uberFareDetails}
-              olaFareDetails={olaFareDetails}
-            />
-          )}
-        />
-      </Tab.Navigator>
+        </Stack.Screen>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };

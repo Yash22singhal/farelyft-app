@@ -57,7 +57,7 @@ const OlaTab = ({ coordinates, setOlaFareDetails }) => {
 
   const injectJS = `
     (function() {
-      const fare = document.querySelector('.fare-amount'); // Update selector to match the fare element
+      const fare = document.querySelector('.price'); // Update selector to match the fare element
       if (fare) {
         return fare.innerText;
       }
@@ -67,7 +67,6 @@ const OlaTab = ({ coordinates, setOlaFareDetails }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 10 }}>Ola</Text>
       <WebView 
         source={{ uri: olaURL }} 
         style={{ flex: 1 }} 
